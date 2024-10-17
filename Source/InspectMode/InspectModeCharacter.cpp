@@ -9,9 +9,11 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "MovieSceneTracksComponentTypes.h"
 #include "PlayerWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "Engine/LocalPlayer.h"
+#include "Runtime/Media/Public/IMediaControls.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -22,7 +24,7 @@ AInspectModeCharacter::AInspectModeCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
-		
+
 	// Create a CameraComponent	
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
@@ -31,7 +33,7 @@ AInspectModeCharacter::AInspectModeCharacter()
 
 	InspectOrigin = CreateDefaultSubobject<USceneComponent>(TEXT("InspectOrigin"));
 	InspectOrigin->SetupAttachment(FirstPersonCameraComponent);
-	
+
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
 	Mesh1P->SetOnlyOwnerSee(true);
@@ -40,7 +42,6 @@ AInspectModeCharacter::AInspectModeCharacter()
 	Mesh1P->CastShadow = false;
 	//Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
-
 }
 
 void AInspectModeCharacter::BeginPlay()
@@ -67,12 +68,12 @@ void AInspectModeCharacter::Tick(float DeltaTime)
 
 		FCollisionObjectQueryParams ObjectQueryParams;
 		ObjectQueryParams.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldDynamic);
-		
+
 		FCollisionQueryParams QueryParams;
 		QueryParams.AddIgnoredActor(this);
-		
+
 		bool IsHit = GetWorld()->LineTraceSingleByObjectType(Hit, Start, End, ObjectQueryParams, QueryParams);
-		
+
 		if (IsHit && IsValid(Hit.GetActor()))
 		{
 			CurrentInspectActor = Hit.GetActor();
@@ -84,13 +85,12 @@ void AInspectModeCharacter::Tick(float DeltaTime)
 			PlayerWidget->SetPromptF(false);
 		}
 	}
-		
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
 
 void AInspectModeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{	
+{
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
@@ -104,14 +104,20 @@ void AInspectModeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AInspectModeCharacter::Look);
 
-		EnhancedInputComponent->BindAction(EnterInspectAction, ETriggerEvent::Triggered, this, &AInspectModeCharacter::EnterInspect);
-		EnhancedInputComponent->BindAction(ExitInspectAction, ETriggerEvent::Triggered, this, &AInspectModeCharacter::ExitInspect);
+		EnhancedInputComponent->BindAction(EnterInspectAction, ETriggerEvent::Triggered, this,
+		                                   &AInspectModeCharacter::EnterInspect);
+		EnhancedInputComponent->BindAction(ExitInspectAction, ETriggerEvent::Triggered, this,
+		                                   &AInspectModeCharacter::ExitInspect);
 
-		EnhancedInputComponent->BindAction(RotateInspectAction, ETriggerEvent::Triggered, this, &AInspectModeCharacter::RotateInspect);
+		EnhancedInputComponent->BindAction(RotateInspectAction, ETriggerEvent::Triggered, this,
+		                                   &AInspectModeCharacter::RotateInspect);
 	}
 	else
 	{
-		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+		UE_LOG(LogTemplateCharacter, Error,
+		       TEXT(
+			       "'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."
+		       ), *GetNameSafe(this));
 	}
 }
 
@@ -146,19 +152,38 @@ void AInspectModeCharacter::Look(const FInputActionValue& Value)
 
 void AInspectModeCharacter::EnterInspect()
 {
-	// https://forums.unrealengine.com/t/get-enhanced-input-local-player-subsystem-in-c/1732524/2
-	auto PlayerController = Cast<APlayerController>(GetController());
-	auto InputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
-	InputSubsystem->RemoveMappingContext(DefaultMappingContext);
-	InputSubsystem->AddMappingContext(InspectMappingContext, 0);
+	if (!IsInspecting && IsValid(CurrentInspectActor))
+	{
+		IsInspecting = true;
+		PlayerWidget->SetPromptF(false);
+		InspectOrigin->SetRelativeRotation(FRotator::ZeroRotator);
+		InitialInspectTransform = CurrentInspectActor->GetActorTransform();
+		CurrentInspectActor->AttachToComponent(InspectOrigin, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+		// https://forums.unrealengine.com/t/get-enhanced-input-local-player-subsystem-in-c/1732524/2
+		auto PlayerController = Cast<APlayerController>(GetController());
+		auto InputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(
+			PlayerController->GetLocalPlayer());
+		InputSubsystem->RemoveMappingContext(DefaultMappingContext);
+		InputSubsystem->AddMappingContext(InspectMappingContext, 0);
+	}
 }
 
 void AInspectModeCharacter::ExitInspect()
 {
-	auto PlayerController = Cast<APlayerController>(GetController());
-	auto InputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
-	InputSubsystem->RemoveMappingContext(InspectMappingContext);
-	InputSubsystem->AddMappingContext(DefaultMappingContext, 0);
+	if (IsInspecting)
+	{
+		IsInspecting = false;
+		CurrentInspectActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentInspectActor->SetActorTransform(InitialInspectTransform);
+		CurrentInspectActor = nullptr;
+		
+		auto PlayerController = Cast<APlayerController>(GetController());
+		auto InputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(
+			PlayerController->GetLocalPlayer());
+		InputSubsystem->RemoveMappingContext(InspectMappingContext);
+		InputSubsystem->AddMappingContext(DefaultMappingContext, 0);
+	}
 }
 
 void AInspectModeCharacter::RotateInspect(const FInputActionValue& Value)

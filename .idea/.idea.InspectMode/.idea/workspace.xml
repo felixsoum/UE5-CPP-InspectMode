@@ -13,7 +13,6 @@
   <component name="ChangeListManager">
     <list default="true" id="09dc84bf-92bd-45b1-a6a8-2a4fbba824c4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.InspectMode/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InspectMode/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonCharacter.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/InspectMode/InspectModeCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/InspectMode/InspectModeCharacter.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/InspectMode/InspectModeCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/InspectMode/InspectModeCharacter.h" afterDir="false" />
     </list>
@@ -27,7 +26,9 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://D:/Program Files/Epic Games/UE_5.4/Engine/Source/Editor/UnrealEd/Classes/Editor/UnrealEdEngine.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Classes/Engine/EngineTypes.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Classes/Engine/World.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Private/EngineTypes.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/UMG/Public/Blueprint/UserWidget.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProblemsViewState">
@@ -492,7 +493,7 @@
       <option name="presentableId" value="Default" />
       <updated>1729133539594</updated>
       <workItem from="1729133546553" duration="234000" />
-      <workItem from="1729134634968" duration="5055000" />
+      <workItem from="1729134634968" duration="5971000" />
     </task>
     <servers />
   </component>

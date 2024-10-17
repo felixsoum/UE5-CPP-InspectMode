@@ -105,5 +105,7 @@ private:
 	bool IsInspecting;
 
 	AActor* CurrentInspectActor;
+
+	FTransform InitialInspectTransform;
 };
 
