@@ -29,6 +29,9 @@ class AInspectModeCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* InspectOrigin;
+	
 	/** Jump Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputAction* JumpAction;
@@ -61,6 +64,8 @@ public:
 protected:
 	virtual void BeginPlay();
 
+	virtual void Tick(float DeltaTime) override;
+	
 public:
 		
 	/** Look Input Action */
@@ -95,6 +100,10 @@ public:
 	TSubclassOf<UUserWidget> PlayerWidgetClass;
 	
 private:
-	class UPlayerWidget* PlayerWidget; 
+	class UPlayerWidget* PlayerWidget;
+
+	bool IsInspecting;
+
+	AActor* CurrentInspectActor;
 };
 

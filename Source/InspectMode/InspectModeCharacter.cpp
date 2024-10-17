@@ -29,6 +29,9 @@ AInspectModeCharacter::AInspectModeCharacter()
 	FirstPersonCameraComponent->SetRelativeLocation(FVector(-10.f, 0.f, 60.f)); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
+	InspectOrigin = CreateDefaultSubobject<USceneComponent>(TEXT("InspectOrigin"));
+	InspectOrigin->SetupAttachment(FirstPersonCameraComponent);
+	
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
 	Mesh1P->SetOnlyOwnerSee(true);
@@ -48,6 +51,40 @@ void AInspectModeCharacter::BeginPlay()
 	auto UserWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerWidgetClass);
 	PlayerWidget = Cast<UPlayerWidget>(UserWidget);
 	PlayerWidget->AddToViewport();
+}
+
+void AInspectModeCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (!IsInspecting)
+	{
+		// https://dev.epicgames.com/community/snippets/2rR/simple-c-line-trace-collision-query
+		FHitResult Hit;
+
+		FVector Start = FirstPersonCameraComponent->GetComponentLocation();
+		FVector End = Start + FirstPersonCameraComponent->GetForwardVector() * 5000.f;
+
+		FCollisionObjectQueryParams ObjectQueryParams;
+		ObjectQueryParams.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldDynamic);
+		
+		FCollisionQueryParams QueryParams;
+		QueryParams.AddIgnoredActor(this);
+		
+		bool IsHit = GetWorld()->LineTraceSingleByObjectType(Hit, Start, End, ObjectQueryParams, QueryParams);
+		
+		if (IsHit && IsValid(Hit.GetActor()))
+		{
+			CurrentInspectActor = Hit.GetActor();
+			PlayerWidget->SetPromptF(true);
+		}
+		else
+		{
+			CurrentInspectActor = nullptr;
+			PlayerWidget->SetPromptF(false);
+		}
+	}
+		
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
