@@ -66,6 +66,11 @@ void AInspectModeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AInspectModeCharacter::Look);
+
+		EnhancedInputComponent->BindAction(EnterInspectAction, ETriggerEvent::Triggered, this, &AInspectModeCharacter::EnterInspect);
+		EnhancedInputComponent->BindAction(ExitInspectAction, ETriggerEvent::Triggered, this, &AInspectModeCharacter::ExitInspect);
+
+		EnhancedInputComponent->BindAction(RotateInspectAction, ETriggerEvent::Triggered, this, &AInspectModeCharacter::RotateInspect);
 	}
 	else
 	{
@@ -100,4 +105,26 @@ void AInspectModeCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AInspectModeCharacter::EnterInspect()
+{
+	// https://forums.unrealengine.com/t/get-enhanced-input-local-player-subsystem-in-c/1732524/2
+	auto PlayerController = Cast<APlayerController>(GetController());
+	auto InputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+	InputSubsystem->RemoveMappingContext(DefaultMappingContext);
+	InputSubsystem->AddMappingContext(InspectMappingContext, 0);
+}
+
+void AInspectModeCharacter::ExitInspect()
+{
+	auto PlayerController = Cast<APlayerController>(GetController());
+	auto InputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+	InputSubsystem->RemoveMappingContext(InspectMappingContext);
+	InputSubsystem->AddMappingContext(DefaultMappingContext, 0);
+}
+
+void AInspectModeCharacter::RotateInspect(const FInputActionValue& Value)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Red, TEXT("Rotating"));
 }
