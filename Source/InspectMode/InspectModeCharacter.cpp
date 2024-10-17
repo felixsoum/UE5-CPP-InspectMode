@@ -9,6 +9,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "PlayerWidget.h"
+#include "Blueprint/UserWidget.h"
 #include "Engine/LocalPlayer.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -42,6 +44,10 @@ void AInspectModeCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	auto UserWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerWidgetClass);
+	PlayerWidget = Cast<UPlayerWidget>(UserWidget);
+	PlayerWidget->AddToViewport();
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -75,6 +81,7 @@ void AInspectModeCharacter::Move(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
+		PlayerWidget->SetPromptF(true);
 		// add movement 
 		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 		AddMovementInput(GetActorRightVector(), MovementVector.X);
@@ -88,6 +95,7 @@ void AInspectModeCharacter::Look(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
+		PlayerWidget->SetPromptF(false);
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);

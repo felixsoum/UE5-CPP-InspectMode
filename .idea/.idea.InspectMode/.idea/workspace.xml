@@ -7,16 +7,35 @@
     <projectFile>Intermediate/ProjectFiles/InspectMode.vcxproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/UE5.vcxproj</projectFile>
   </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="09dc84bf-92bd-45b1-a6a8-2a4fbba824c4" name="Changes" comment="" />
+    <list default="true" id="09dc84bf-92bd-45b1-a6a8-2a4fbba824c4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.InspectMode/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InspectMode/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonCharacter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InspectMode.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/InspectMode.uproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/InspectMode/InspectMode.Build.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/InspectMode/InspectMode.Build.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/InspectMode/InspectModeCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/InspectMode/InspectModeCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/InspectMode/InspectModeCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/InspectMode/InspectModeCharacter.h" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://D:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/UMG/Public/Blueprint/UserWidget.h" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="Toolset" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2nXy4ObwwauMfW4sxl0aQpCzprs" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -24,8 +43,15 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "C++ Project.InspectMode.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
@@ -466,6 +492,7 @@
       <option name="presentableId" value="Default" />
       <updated>1729133539594</updated>
       <workItem from="1729133546553" duration="234000" />
+      <workItem from="1729134634968" duration="1580000" />
     </task>
     <servers />
   </component>
